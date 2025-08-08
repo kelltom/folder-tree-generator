@@ -54,12 +54,12 @@ def build_tree_lines(root: str, excluded_roots_norm: set) -> list[str]:
 
         try:
             with os.scandir(dir_path) as it:
-                entries = [e for e in it]
+                entries = list(it)
         except PermissionError:
-            lines.append(prefix + "└── [Access Denied]")
+            lines.append(f"{prefix}└── [Access Denied]")
             return
         except OSError as e:
-            lines.append(prefix + f"└── [OS Error: {e.strerror or e}]")
+            lines.append(f"{prefix}└── [OS Error: {e.strerror or e}]")
             return
 
         # Sort: directories first, then files; both alphabetically
@@ -170,8 +170,7 @@ class App(tk.Tk):
     # --------- UI callbacks ----------
 
     def pick_root(self):
-        folder = filedialog.askdirectory(title="Select root folder")
-        if folder:
+        if folder := filedialog.askdirectory(title="Select root folder"):
             self.root_folder_var.set(folder)
 
     def add_exclusion(self):
